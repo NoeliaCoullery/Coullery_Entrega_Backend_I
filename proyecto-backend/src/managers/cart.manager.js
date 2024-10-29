@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 import path from 'path';
-import ProductManager from './product.manager.js';
+import  { ProdManager} from './product.manager.js';
 
 class CartManager{
     constructor(path) {
@@ -13,7 +13,7 @@ class CartManager{
             if(fs.existsSync(this.path)) {
                 const carts = await fs.promises.readFile(this.path, "utf-8");
                 const cartsJSON = JSON.parse(carts);
-                return cartsJSON = JSON.parse(carts);
+                return cartsJSON;
             } else {
                 return [];
             }
@@ -37,7 +37,7 @@ class CartManager{
 
     async getCartById(id) {
         try {
-            const cart = await this.getAllCarts();
+            const carts = await this.getAllCarts();
             return carts.find((c) => c.id === id);
         } catch(error) {
             throw new Error (error);
@@ -45,7 +45,7 @@ class CartManager{
     }
     async saveProdToCart(idCart, idProd){
         try {
-           const prodExists = await ProductManager.getById(idProd);
+           const prodExists = await prodManager.getById(idProd);
            if(!prodExists) throw new Error ('No existe el producto seleccionado');
            let cartsFile = await this.getAllCarts();
            const cartExists = await this.getCartById(idCart);
@@ -59,7 +59,7 @@ class CartManager{
             cartExists.products.push(product);
            } else existsProdInCart.quantity += 1;
 
-           const updatedCarts = cartsFile.map((cart) =>{
+           const updatedCarts = cartsFile.map((cart) => {
             if(cart.id === idCart) return cartExists;
             return cart;
            } );

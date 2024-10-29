@@ -1,6 +1,7 @@
 import { Router} from "express";
-import ProductManager from "../managers/product.manager.js";
-const prodManager = new ProductManager('./products.json');
+import {prodManager} from "../managers/product.manager.js";
+
+const prodManager = new ProductManager('./products.json');//
 
 const router = Router();
 
@@ -18,8 +19,8 @@ router.get("/", async (req, res) => {
   router.get("/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const prods = await prodManager.getById(id); //ver si es user o users
-      res.status(200).json(prods);
+      const prod = await prodManager.getById(id); //ver si es user o users
+      res.status(200).json(prod);
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
   
   router.post("/", async (req, res) => {
     try {
-      const prod = await prodManager.create(req.body); // ver si es user o users
+      const prod = await prodManager.create(req.body);
       res.status(201).json(prod);
     } catch (error) {
       res.status(500).json({ message: error.message });

@@ -20,7 +20,7 @@ const router = Router();
         } 
     });
 
-    router.post('/:idCart/products/:idProd', async (req, res) => {
+    router.post('/:idCart/product/:idProd', async (req, res) => {
         try {
         const  {idProd } = req.params;
         const { idCart } =req.params;

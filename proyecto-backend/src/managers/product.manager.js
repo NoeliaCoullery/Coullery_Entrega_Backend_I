@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
 
 export default class ProductManager {
     constructor(path) {
@@ -23,8 +24,8 @@ export default class ProductManager {
             const product = {
             id: uuidv4(), ...obj};
             const products = await this.getAll();
-            const prodExists = products.find((p) => p.id === product.id);
-            if(prodExists) throw new Error('El producto ingresado ya existe');
+            const prodExist = products.find((p) => p.id === product.id);
+            if(prodExist) throw new Error('El producto ingresado ya existe');
             products.push(product);
             await fs.promises.writeFile(this.path, JSON.stringify(products));
             return product;
@@ -37,8 +38,8 @@ export default class ProductManager {
         try {
             const products = await this.getAll(); 
             if (!products.length > 0) throw new Error("El listado de productos está vacío");
-            if (!product) throw new Error("Producto no encontrado");
             const product = products.find(product => product.id === id);
+            if (!product) throw new Error("Producto no encontrado");
             return product;
         } catch (error) {
             throw new Error (error.message);
@@ -48,10 +49,8 @@ export default class ProductManager {
 
     async update(obj, id){
         try {
-            //array de productos
             const products = await this.getAll();
-            //producto encontrado
-            let prod = await this.getById(id); //si no existe, devuelve error
+            let prod = await this.getById(id);
             prod = { ...prod, ...obj };
             const newArray = products.filter((prod) => prod.id !== id);
             newArray.push(prod);

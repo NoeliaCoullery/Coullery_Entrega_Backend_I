@@ -1,8 +1,10 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
+import path from 'path';
 
-export default class UserManager {
+
+class UserManager {
     constructor(path) {
         this.path = path;
     }
@@ -28,13 +30,11 @@ export default class UserManager {
 
     async createUser(obj) {
         try{
-            //const cart = await cartManager.create();
             const user = {
             id: uuidv4(), 
-            //cart: cart.id
             ...obj};
             const users = await this.getUsers();
-            const userExists = user.find((u) => u.email === user.email);
+            const userExists = users.find((u) => u.email === user.email);
             if(userExists) throw new Error('El usuario ingresado ya existe');
             this.#createHash(user);
             users.push(user);
@@ -49,8 +49,8 @@ export default class UserManager {
         try {
             const users = await this.getUsers();
             if (!users.length > 0) throw new Error("El listado de usuarios está vacía");
-            if (!user) throw new Error("Usuario no encontrado");
             const user = users.find(user => user.id === id);
+            if (!user) throw new Error("Usuario no encontrado");
             return user;
         } catch (error) {
             throw new Error (error.message);
@@ -60,10 +60,8 @@ export default class UserManager {
 
     async updateUser(obj, id){
         try {
-            //array de usuarios
             const users = await this.getUsers();
-            //usuario encontrado
-            let user = await this.getUserById(id); //si no existe, devuelve error
+            let user = await this.getUserById(id);
             user = { ...user, ...obj };
             if(obj.password) this.#createHash(user);
             const newArray = users.filter((user) => user.id !== id);
@@ -97,4 +95,6 @@ export default class UserManager {
         throw new Error(error);
     }
     }
-}
+};
+
+export default userManager = new UserManager(path.join(process.cwd(), "src/data/users.json"));
