@@ -1,15 +1,15 @@
 import { Router} from "express";
-import {prodManager} from "../managers/product.manager.js";
+import ProductManager from "../managers/product.manager.js";
 
-const prodManager = new ProductManager('./products.json');//
+const localProdManager = new ProductManager('./products.json');
 
 const router = Router();
 
-//ver de agregar aca el uploader. lo explica en 1 hs 30 min clase 8
+
 
 router.get("/", async (req, res) => {
     try {
-      const prods = await prodManager.getAll(); 
+      const prods = await localProdManager.getAll(); 
       res.status(200).json(prods);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
   router.get("/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const prod = await prodManager.getById(id); //ver si es user o users
+      const prod = await localProdManager.getById(id); 
       res.status(200).json(prod);
     } catch (error) {
       res.status(404).json({ message: error.message });
@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
   
   router.post("/", async (req, res) => {
     try {
-      const prod = await prodManager.create(req.body);
+      const prod = await localProdManager.create(req.body);
       res.status(201).json(prod);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
   
   router.delete("/", async (req, res) => {
     try {
-      await prodManager.deleteAll();
+      await localProdManager.deleteAll();
       res.json({ message: "Todos los productos fueron eliminados exitosamente" });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
   router.delete("/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const prodDel = await prodManager.delete(id);
+      const prodDel = await localProdManager.delete(id);
       res
         .status(200)
         .json({ message: `Producto ID ${prodDel.id} fue eliminado exitosamente` });
@@ -59,7 +59,7 @@ router.get("/", async (req, res) => {
   router.put("/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const prodUpd = await prodManager.update(req.body, id);
+      const prodUpd = await localProdManager.update(req.body, id);
       res.status(200).json(prodUpd);
     } catch (error) {
       res.status(500).json({ message: error.message });

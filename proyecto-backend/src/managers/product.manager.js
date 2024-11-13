@@ -21,16 +21,16 @@ export default class ProductManager {
 
     async create(obj) {
         try{
-            const product = {
+            if (!obj.title || !obj.price || !obj.description){
+                throw new Error ("Todos los campos son obligatorios");
+            }   const product = {
             id: uuidv4(), ...obj};
             const products = await this.getAll();
-            const prodExist = products.find((p) => p.id === product.id);
-            if(prodExist) throw new Error('El producto ingresado ya existe');
             products.push(product);
-            await fs.promises.writeFile(this.path, JSON.stringify(products));
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
             return product;
             } catch (error) {
-            throw new Error (error);
+            throw new Error (error.message);
         }
     }
 

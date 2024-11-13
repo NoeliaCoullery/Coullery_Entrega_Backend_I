@@ -1,0 +1,39 @@
+h1 {
+    color: rgb(204, 131, 143);
+
+}
+
+h2 {
+    color: rgb(118, 235, 118)
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #ffe0a3;
+    color: rgb(255, 255, 255);
+}
+ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+
+}
+li a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+}
+
+li a:hover {
+    text-decoration: underline;
+    color: rgb(204, 131, 143);
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    border-radius: 50%;
+
+}

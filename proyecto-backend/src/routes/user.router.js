@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { userValidator } from '../middlewares/user.validator.js';
 import { uploader } from '../middlewares/multer.js';
-import  { userManager } from '../managers/user.manager.js';
+import  userManager  from '../managers/user.manager.js';
 
-const userManager = new UserManager ('./users.json');
+//const userManager = new UserManager ('.src/data/users.json');
 
 const router = Router();
 
@@ -39,7 +39,7 @@ router.post("/upload-file", uploader.single('profile'), async (req, res) => {
   try {
     console.log(req.file);
     const userBody = req.body
-    userBody.profilel = req.file.filename;
+    userBody.profile = req.file.filename;
     const user = await userManager.createUser(userBody);
     res.status(201).json(user);
     } catch (error) {
@@ -48,6 +48,17 @@ router.post("/upload-file", uploader.single('profile'), async (req, res) => {
       
     }
 });
+
+// nuevo post
+router.post('/register', async (req, res) => {
+  try {
+    await userManager.createUser(req.body);
+    res.redirect('/users');
+  } catch (error) {
+    res.render('error', { message: error.message})
+
+  }
+})
 
 router.delete("/", async (req, res) => {
   try {

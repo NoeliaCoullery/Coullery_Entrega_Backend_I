@@ -1,9 +1,11 @@
 import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 import path from 'path';
-import  { ProdManager} from './product.manager.js';
+import  ProductManager from './product.manager.js';
 
-class CartManager{
+const prodManager = new ProductManager('.products.json');
+
+class CartManager{ prodManager
     constructor(path) {
         this.path = path;
 
